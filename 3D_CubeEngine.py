@@ -221,7 +221,50 @@ class Main:
 
 					if event.y < 0: # down
 
-						print('down')
+						# if z larger than 100 or if y smaller than 0 and z equals to 100 then increase y value
+						y_increase = (
+							(self.cube_coordinates[:,:,2] > 100) | (
+								(self.cube_coordinates[:,:,1] < 0) & (self.cube_coordinates[:,:,2] == 100)
+							))
+
+						# if z smaller than 100 or if y larger than 0 and z equals to 100 then decrease y value
+						y_reduce = (
+							(self.cube_coordinates[:,:,2] < 100) | (
+								(self.cube_coordinates[:,:,1] > 0) & (self.cube_coordinates[:,:,2] == 100)
+								)
+							)
+
+						# if y smaller than 0 or if y equals to 0 and z smaller_equals to 0 then increase z
+						z_increase = (
+							(self.cube_coordinates[:,:,1] < 0) |
+							((self.cube_coordinates[:,:,1] == 0) & (self.cube_coordinates[:,:,2] <= 0))
+							)
+
+						# if y larger than 0 or if y equals to 0 and z larger_equals to 200 then decrease z
+						z_decrease = (
+							(self.cube_coordinates[:,:,1] > 0) |
+							((self.cube_coordinates[:,:,1] == 0) & (self.cube_coordinates[:,:,2] >= 200))
+							)
+
+						
+						
+
+						# reduce y
+						self.cube_coordinates[y_reduce, 1] -= 5
+
+
+						# increase y
+						self.cube_coordinates[y_increase, 1] += 5
+
+						# increase z
+						self.cube_coordinates[z_increase, 2] += 5
+
+						# decrease z
+						self.cube_coordinates[z_decrease, 2] -= 5
+
+						# Getting the drawing coordinates of the cube
+						self.draw_cube = self.engine.convert(self.cube_coordinates)
+						self.draw_cube = self.engine.perspective(self.draw_cube)
 
 					if event.y > 0: # up
 
